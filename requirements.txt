@@ -1,6 +1,6 @@
 geopy
 pydeck
-police_api==1.0.1
+police-api-client 1.2.2
 plotly
 numpy==1.18.5
 pandas==1.3.1
