@@ -4,7 +4,7 @@ from geopy.geocoders import Nominatim
 
 # Input
 import streamlit as st
-st.set_page_config(layout="wide")
+#st.set_page_config(layout="wide")
 st.title('London police: Crime Data')
 address_ = st.sidebar.text_input('Insert adress')
 try:
