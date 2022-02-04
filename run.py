@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from geopy.geocoders import Nominatim
+import geocoder
 
 # Input
 import streamlit as st
@@ -11,7 +12,9 @@ current_position = st.sidebar.button('Use current position')
 geolocator = Nominatim(user_agent="run.py") #name of the file
 
 if current_position:
-    location = geolocator.ip('me')
+    loc = geocoder.ip('me')
+    location = geolocator.geocode(loc)
+    
 else:
     location = geolocator.geocode(str(address_))
 try:
