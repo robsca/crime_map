@@ -1,3 +1,4 @@
+geocoder
 geopy
 pydeck
 police-api-client==1.2.2
