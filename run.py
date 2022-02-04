@@ -7,12 +7,16 @@ import streamlit as st
 #st.set_page_config(layout="wide")
 st.title('London police: Crime Data')
 address_ = st.sidebar.text_input('Insert adress')
+current_position = st.button('Use current position')
+geolocator = Nominatim(user_agent="run.py") #name of the file
+
+if current_position:
+    location = geocoder.ip('me')
+else:
+    location = geolocator.geocode(str(address_))
 try:
     # Create map
-    geolocator = Nominatim(user_agent="run.py") #name of the file
-    location = geolocator.geocode(str(address_))
     address = location.address
-
     column1, column2 = st.columns(2)
     with column1:
         # plot map crime density
