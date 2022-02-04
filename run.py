@@ -11,7 +11,7 @@ current_position = st.sidebar.button('Use current position')
 geolocator = Nominatim(user_agent="run.py") #name of the file
 
 if current_position:
-    location = geocoder.ip('me')
+    location = geolocator.ip('me')
 else:
     location = geolocator.geocode(str(address_))
 try:
