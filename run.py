@@ -29,5 +29,5 @@ if st.button('Search'):
             from get_categories_piechart import categories
             cat = categories(location.latitude, location.longitude)
     except:
-        st.subheader("Select a valid location)
+        st.subheader("Select a valid location")
         st.subheader("Make sure you put the space in the right spot - ex. N1 1BB")
