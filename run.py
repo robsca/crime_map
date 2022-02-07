@@ -5,17 +5,17 @@ import geocoder
 import streamlit as st
 
 st.set_page_config(layout="wide")
-st.title('London police: Crime Data')
+st.title('London Police: Crime Data')
 
 # Input
-address_ = st.sidebar.text_input('Insert adress')
+address_ = st.sidebar.text_input('Insert a Uk Postcode')
 
 # Find location
 geolocator = Nominatim(user_agent="run.py") #name of the file
 location = geolocator.geocode(str(address_))
 
 # Show results 
-if st.button('Press'):
+if st.button('Search'):
 try:
     # Create map
     address = location.address
@@ -29,4 +29,5 @@ try:
         from get_categories_piechart import categories
         cat = categories(location.latitude, location.longitude)
 except:
-    st.subheader('Select a valid location')
+    st.subheader("Select a valid location)
+    st.subheader("Make sure you put the space in the right spot - ex. N1 1BB")
