@@ -2,21 +2,20 @@ import pandas as pd
 import numpy as np
 from geopy.geocoders import Nominatim
 import geocoder
+import streamlit as st
+
+st.set_page_config(layout="wide")
+st.title('London police: Crime Data')
 
 # Input
-import streamlit as st
-#st.set_page_config(layout="wide")
-st.title('London police: Crime Data')
 address_ = st.sidebar.text_input('Insert adress')
-current_position = st.sidebar.button('Use current position')
-geolocator = Nominatim(user_agent="run.py") #name of the file
 
-if current_position:
-    loc = geocoder.ip('me')
-    location = geolocator.geocode(loc)
-    
-else:
-    location = geolocator.geocode(str(address_))
+# Find location
+geolocator = Nominatim(user_agent="run.py") #name of the file
+location = geolocator.geocode(str(address_))
+
+# Show results 
+if st.button('Press'):
 try:
     # Create map
     address = location.address
