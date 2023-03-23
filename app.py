@@ -119,6 +119,7 @@ def graph_street_count(df):
    st.plotly_chart(fig, use_container_width=True)
 
 if __name__ == "__main__":
+   st.title("UK Crime Map")
    c1,c2 = st.columns(2)
    postcode = c1.text_input("Enter your postcode")
    boroughs_of_london_choices = list(boroughs_of_london.keys())+["None"]
