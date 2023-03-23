@@ -1,7 +1,9 @@
 # crime_map
 
+![https://img.shields.io/badge/Python-3.7-blue.svg](img.png)
+
 Web app that show the crime data relative to a specific location.
-It's been deployed: https://londoncrimemap.herokuapp.com/
+It's been deployed: 
 
 
 ```bash
