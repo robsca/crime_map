@@ -66,6 +66,8 @@ class API_Police:
       self.crimes_outcomes = [crime.outcome_status if crime.outcome_status != None else 'None' for crime in self.crimes]
       # split at  > it it's there
       self.crimes_outcomes = [str(crime).split('>')[-1] for crime in self.crimes_outcomes]
+      # replace no suspect identified by None
+      self.crimes_outcomes = [crime.replace('no suspect identified', 'NSI').replace(";", "") for crime in self.crimes_outcomes]
       # take off On or near from the street name if it's there
       self.crimes_name_street = [crime.replace('On or near ', '') for crime in self.crimes_name_street]
       # take off empty spaces at the end of the street name
@@ -76,10 +78,7 @@ class API_Police:
       self.df['lat'] = self.df['lat'].astype(float)
       self.df['lng'] = self.df['lng'].astype(float)
 
-      st.write(self.df)   
-
-
-def graph_crimes(df):
+def graph_crimes_map(df):
    fig = px.scatter_mapbox(df, lat="lat", lon="lng", hover_name="street", hover_data=["category", "date", "outcome"], color="category", zoom=10, height=300)
    fig.update_layout(mapbox_style="carto-positron") # or "white-bg", "carto-positron", "carto-darkmatter"
    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
@@ -109,10 +108,22 @@ def graph_outcome_pie_chart(df):
    fig.update_traces(textposition='inside', textinfo='percent+label')
    st.plotly_chart(fig, use_container_width=True)
 
+def graph_street_count(df):
+   df = df.groupby('street').count().reset_index()
+   # sort by count
+   df = df.sort_values(by=df.columns[1], ascending=False)
+   # no empty streets
+   df = df[df['street'] != '']
+   df = df.head(10)
+   fig = px.bar(df, x='street', y=df.columns[1], color='street')
+   st.plotly_chart(fig, use_container_width=True)
+
 if __name__ == "__main__":
-   postcode = st.text_input("Enter your postcode")
+   c1,c2 = st.columns(2)
+   postcode = c1.text_input("Enter your postcode")
    boroughs_of_london_choices = list(boroughs_of_london.keys())+["None"]
-   boroughs_of_london_input = st.selectbox("Select your borough", boroughs_of_london_choices, index=0)
+   boroughs_of_london_input = c2.selectbox("Select your borough", boroughs_of_london_choices, index=0)
+   
    if boroughs_of_london_input != "None":
       postcode = boroughs_of_london[boroughs_of_london_input]
    
@@ -120,8 +131,7 @@ if __name__ == "__main__":
       johnny = API_Police(postcode)
 
       # basic plots
-      st.write("Number of crimes in the last 3 months: ", len(johnny.df))
-      st.write("Number of crimes in the last 3 months by category: ", johnny.df['category'].value_counts())
+      st.write("Number of crimes in this month: ", str(len(johnny.df)))
 
       category_filter = st.sidebar.multiselect("Select the categories you want to see", johnny.df['category'].unique())
       street_filter = st.sidebar.multiselect("Select the streets you want to see", johnny.df['street'].unique())
@@ -136,8 +146,8 @@ if __name__ == "__main__":
       else:
          filtered = filtered
       
-      
-      graph_crimes(filtered)   
+      graph_street_count(filtered)
+      graph_crimes_map(filtered)   
       c1,c2 = st.columns(2)
       with c1:
          graph_pie_chart(filtered)
